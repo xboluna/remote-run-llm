@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://xboluna.github.io/remote-run-llm/sitemap.xml
+
+# LLM agents: see llms.txt and llms-full.txt

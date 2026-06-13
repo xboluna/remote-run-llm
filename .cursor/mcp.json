@@ -1,0 +1,21 @@
+{
+  "mcpServers": {
+    "remote-run-llm-gitmcp": {
+      "url": "https://gitmcp.io/xboluna/remote-run-llm"
+    },
+    "remote-run-llm-mcpdoc": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "mcpdoc",
+        "mcpdoc",
+        "--urls",
+        "remote-run-llm:https://xboluna.github.io/remote-run-llm/llms.txt",
+        "--urls",
+        "remote-run-llm-full:https://xboluna.github.io/remote-run-llm/llms-full.txt",
+        "--transport",
+        "stdio"
+      ]
+    }
+  }
+}
