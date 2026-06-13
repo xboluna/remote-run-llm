@@ -36,3 +36,5 @@ download(host, remote_path, local_path)
 ```
 
 See RECIPES.md and https://xboluna.github.io/remote-run-llm/recipes.html for copy-paste examples.
+
+Full project context: [AGENTS.md](AGENTS.md) (also `CLAUDE.md`).
