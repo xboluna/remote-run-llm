@@ -107,7 +107,7 @@ def test_run_returns_command_result() -> None:
     mock_stderr.read.return_value = b""
     mock_client.exec_command.return_value = (mock_stdin, mock_stdout, mock_stderr)
 
-    with patch("remote_run.run.ssh_client") as ssh_ctx:
+    with patch("remote_run.connection.ssh_client") as ssh_ctx:
         ssh_ctx.return_value.__enter__.return_value = mock_client
         result = run("203.0.113.10", "echo hello", user="ubuntu")
 
@@ -124,7 +124,7 @@ def test_upload_calls_sftp_put() -> None:
     mock_sftp = MagicMock()
     mock_client.open_sftp.return_value.__enter__.return_value = mock_sftp
 
-    with patch("remote_run.files.ssh_client") as ssh_ctx:
+    with patch("remote_run.connection.ssh_client") as ssh_ctx:
         ssh_ctx.return_value.__enter__.return_value = mock_client
         upload("203.0.113.10", "local.txt", "/remote/local.txt", user="deploy")
 
@@ -136,7 +136,7 @@ def test_download_calls_sftp_get() -> None:
     mock_sftp = MagicMock()
     mock_client.open_sftp.return_value.__enter__.return_value = mock_sftp
 
-    with patch("remote_run.files.ssh_client") as ssh_ctx:
+    with patch("remote_run.connection.ssh_client") as ssh_ctx:
         ssh_ctx.return_value.__enter__.return_value = mock_client
         download("203.0.113.10", "/remote/log.txt", "./log.txt")
 

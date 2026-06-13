@@ -2,13 +2,8 @@
 
 from __future__ import annotations
 
+from remote_run import connection
 from remote_run.auth import resolve_host
-from remote_run.connection import (
-    DEFAULT_COMMAND_TIMEOUT,
-    DEFAULT_CONNECT_TIMEOUT,
-    exec_remote_command,
-    ssh_client,
-)
 from remote_run.errors import RemoteRunError, wrap_paramiko_error
 from remote_run.result import CommandResult
 
@@ -22,8 +17,8 @@ def run(
     password: str | None = None,
     key_passphrase: str | None = None,
     port: int = 22,
-    connect_timeout: float = DEFAULT_CONNECT_TIMEOUT,
-    command_timeout: float = DEFAULT_COMMAND_TIMEOUT,
+    connect_timeout: float = connection.DEFAULT_CONNECT_TIMEOUT,
+    command_timeout: float = connection.DEFAULT_COMMAND_TIMEOUT,
 ) -> CommandResult:
     """Run a command on a remote host over SSH.
 
@@ -38,7 +33,7 @@ def run(
     """
     resolved_host = resolve_host(host)
     try:
-        with ssh_client(
+        with connection.ssh_client(
             resolved_host,
             user=user,
             password=password,
@@ -47,7 +42,7 @@ def run(
             port=port,
             connect_timeout=connect_timeout,
         ) as client:
-            stdout, stderr, exit_code = exec_remote_command(
+            stdout, stderr, exit_code = connection.exec_remote_command(
                 client,
                 command,
                 command_timeout=command_timeout,

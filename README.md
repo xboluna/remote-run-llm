@@ -52,7 +52,7 @@ pip install remote-run-llm
 uv add remote-run-llm
 ```
 
-**Requirements:** Python 3.10+, a reachable SSH server, and credentials (key file or password).
+**Requirements:** Python 3.8+, a reachable SSH server, and credentials (key file or password). On Python 3.8, pip installs Paramiko 3.x; on 3.9+, Paramiko 4.x.
 
 ---
 

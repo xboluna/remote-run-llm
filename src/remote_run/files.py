@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
+from remote_run import connection
 from remote_run.auth import resolve_host
-from remote_run.connection import DEFAULT_CONNECT_TIMEOUT, ssh_client, transfer_file
 from remote_run.errors import RemoteRunError, wrap_paramiko_error
 
 
@@ -17,7 +17,7 @@ def upload(
     password: str | None = None,
     key_passphrase: str | None = None,
     port: int = 22,
-    connect_timeout: float = DEFAULT_CONNECT_TIMEOUT,
+    connect_timeout: float = connection.DEFAULT_CONNECT_TIMEOUT,
 ) -> None:
     """Upload a local file to a remote path over SFTP.
 
@@ -27,7 +27,7 @@ def upload(
     """
     resolved_host = resolve_host(host)
     try:
-        with ssh_client(
+        with connection.ssh_client(
             resolved_host,
             user=user,
             password=password,
@@ -36,7 +36,7 @@ def upload(
             port=port,
             connect_timeout=connect_timeout,
         ) as client:
-            transfer_file(
+            connection.transfer_file(
                 client,
                 local_path=local_path,
                 remote_path=remote_path,
@@ -61,7 +61,7 @@ def download(
     password: str | None = None,
     key_passphrase: str | None = None,
     port: int = 22,
-    connect_timeout: float = DEFAULT_CONNECT_TIMEOUT,
+    connect_timeout: float = connection.DEFAULT_CONNECT_TIMEOUT,
 ) -> None:
     """Download a remote file to a local path over SFTP.
 
@@ -71,7 +71,7 @@ def download(
     """
     resolved_host = resolve_host(host)
     try:
-        with ssh_client(
+        with connection.ssh_client(
             resolved_host,
             user=user,
             password=password,
@@ -80,7 +80,7 @@ def download(
             port=port,
             connect_timeout=connect_timeout,
         ) as client:
-            transfer_file(
+            connection.transfer_file(
                 client,
                 local_path=local_path,
                 remote_path=remote_path,

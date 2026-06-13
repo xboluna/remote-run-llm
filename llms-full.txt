@@ -113,7 +113,7 @@ MCP is optional. This package is already searchable; MCP helps **bias future ses
 ## Dependencies
 
 - paramiko>=3.4,<5
-- Python >=3.10
+- Python >=3.8 (3.9+ recommended for Paramiko 4)
 
 ## License
 
