@@ -13,6 +13,13 @@
   --accent: #58a6ff;
   --font: "Inter", system-ui, -apple-system, sans-serif;
   --mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+  --tok-kw: #ff7b72;
+  --tok-fn: #d2a8ff;
+  --tok-str: #a5d6ff;
+  --tok-num: #79c0ff;
+  --tok-const: #79c0ff;
+  --tok-builtin: #ffa657;
+  --tok-com: #8b949e;
 }
 
 * {
@@ -204,22 +211,75 @@ h1 {
   font-size: 0.88rem;
   line-height: 1.55;
   margin: 16px 0;
+  white-space: pre;
+  tab-size: 4;
 }
 
-.code-block .kw {
-  color: var(--magenta);
+.tok-kw {
+  color: var(--tok-kw);
 }
 
-.code-block .fn {
-  color: var(--cyan);
+.tok-fn {
+  color: var(--tok-fn);
 }
 
-.code-block .str {
+.tok-str {
+  color: var(--tok-str);
+}
+
+.tok-num {
+  color: var(--tok-num);
+}
+
+.tok-const {
+  color: var(--tok-const);
+}
+
+.tok-builtin {
+  color: var(--tok-builtin);
+}
+
+.tok-com {
+  color: var(--tok-com);
+  font-style: italic;
+}
+
+/* Typed API signatures */
+.api-sig {
+  font-family: var(--mono);
+  font-size: 1.05rem;
+  font-weight: 600;
+  background: #0d1117;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin: 0 0 12px;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.sig-fn {
+  color: var(--tok-fn);
+}
+
+.sig-param {
+  color: var(--tok-builtin);
+}
+
+.sig-default {
+  color: var(--tok-num);
+}
+
+.sig-type {
   color: var(--green);
 }
 
-.code-block .cm {
+.sig-arrow,
+.sig-punc,
+.sig-muted {
   color: var(--muted);
+  font-weight: 500;
 }
 
 .grid-2 {

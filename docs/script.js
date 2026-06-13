@@ -160,6 +160,135 @@ const MCP_SNIPPETS = {
 }`,
 };
 
+const PY_KEYWORDS = new Set([
+  "and", "as", "assert", "async", "await", "break", "class", "continue", "def",
+  "del", "elif", "else", "except", "finally", "for", "from", "global", "if",
+  "import", "in", "is", "lambda", "nonlocal", "not", "or", "pass", "raise",
+  "return", "try", "while", "with", "yield",
+]);
+const PY_CONSTANTS = new Set(["None", "True", "False"]);
+const PY_BUILTINS = new Set([
+  "print", "len", "range", "open", "dict", "list", "set", "tuple", "str", "int",
+  "float", "bool", "enumerate", "zip", "map", "filter", "sorted", "input",
+]);
+const PKG_FUNCS = new Set(["run", "upload", "download", "run_many"]);
+
+function escapeHtml(text) {
+  return text.replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+}
+
+// Tiny, dependency-free Python highlighter. Operates on plain text so the copy
+// buttons (which read textContent) keep returning clean, paste-ready code.
+function highlightPython(code) {
+  let out = "";
+  let i = 0;
+  const n = code.length;
+  const isIdentStart = (c) => /[A-Za-z_]/.test(c);
+  const isIdentPart = (c) => /[A-Za-z0-9_]/.test(c);
+
+  while (i < n) {
+    const ch = code[i];
+
+    if (ch === "#") {
+      let j = i;
+      while (j < n && code[j] !== "\n") j++;
+      out += `<span class="tok-com">${escapeHtml(code.slice(i, j))}</span>`;
+      i = j;
+      continue;
+    }
+
+    if (ch === '"' || ch === "'") {
+      const quote = ch;
+      let j = i + 1;
+      while (j < n) {
+        if (code[j] === "\\") { j += 2; continue; }
+        if (code[j] === quote) { j++; break; }
+        if (code[j] === "\n") break;
+        j++;
+      }
+      out += `<span class="tok-str">${escapeHtml(code.slice(i, j))}</span>`;
+      i = j;
+      continue;
+    }
+
+    if (isIdentStart(ch)) {
+      let j = i + 1;
+      while (j < n && isIdentPart(code[j])) j++;
+      const word = code.slice(i, j);
+      const isCall = code[j] === "(";
+      let cls = "";
+      if (PY_KEYWORDS.has(word)) cls = "tok-kw";
+      else if (PY_CONSTANTS.has(word)) cls = "tok-const";
+      else if (PKG_FUNCS.has(word)) cls = "tok-fn";
+      else if (PY_BUILTINS.has(word)) cls = "tok-builtin";
+      else if (isCall) cls = "tok-fn";
+      out += cls ? `<span class="${cls}">${escapeHtml(word)}</span>` : escapeHtml(word);
+      i = j;
+      continue;
+    }
+
+    if (/[0-9]/.test(ch)) {
+      let j = i + 1;
+      while (j < n && /[0-9._]/.test(code[j])) j++;
+      out += `<span class="tok-num">${escapeHtml(code.slice(i, j))}</span>`;
+      i = j;
+      continue;
+    }
+
+    out += escapeHtml(ch);
+    i++;
+  }
+  return out;
+}
+
+function highlightCodeBlocks() {
+  document.querySelectorAll(".code-block").forEach((block) => {
+    if (block.dataset.lang === "text" || block.dataset.highlighted) return;
+    block.innerHTML = highlightPython(block.textContent.replace(/^\n+|\s+$/g, ""));
+    block.dataset.highlighted = "true";
+  });
+}
+
+// Render API signatures with colored function name, params, and return type.
+function highlightSignature(text) {
+  const match = text.match(/^\s*([A-Za-z_]\w*)\s*\((.*)\)\s*(?:→|->)\s*(.+?)\s*$/s);
+  if (!match) return escapeHtml(text);
+  const [, name, rawParams, returnType] = match;
+
+  const params = rawParams
+    .split(",")
+    .map((p) => p.trim())
+    .filter(Boolean)
+    .map((param) => {
+      if (param === "..." || param === "…") return '<span class="sig-muted">…</span>';
+      const eq = param.indexOf("=");
+      if (eq === -1) return `<span class="sig-param">${escapeHtml(param)}</span>`;
+      const pname = param.slice(0, eq).trim();
+      const pdefault = param.slice(eq + 1).trim();
+      return (
+        `<span class="sig-param">${escapeHtml(pname)}</span>` +
+        `<span class="sig-punc">=</span>` +
+        `<span class="sig-default">${escapeHtml(pdefault)}</span>`
+      );
+    })
+    .join('<span class="sig-punc">, </span>');
+
+  return (
+    `<span class="sig-fn">${escapeHtml(name)}</span>` +
+    `<span class="sig-punc">(</span>${params}<span class="sig-punc">)</span>` +
+    ` <span class="sig-arrow">→</span> ` +
+    `<span class="sig-type">${escapeHtml(returnType)}</span>`
+  );
+}
+
+function highlightSignatures() {
+  document.querySelectorAll(".api-sig").forEach((el) => {
+    if (el.dataset.highlighted) return;
+    el.innerHTML = highlightSignature(el.textContent);
+    el.dataset.highlighted = "true";
+  });
+}
+
 function showToast(message) {
   let toast = document.getElementById("toast");
   if (!toast) {
@@ -249,4 +378,6 @@ document.addEventListener("DOMContentLoaded", () => {
   wireCopyButtons();
   highlightNav();
   fillPromptPreviews();
+  highlightCodeBlocks();
+  highlightSignatures();
 });

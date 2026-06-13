@@ -26,7 +26,7 @@
   <main class="container">
     <section class="hero" style="padding-bottom: 0;">
       <h1>API Reference</h1>
-      <p class="lead">Three functions cover ~99% of SSH scripting. All return decoded strings — never bytes.</p>
+      <p class="lead">Four functions cover almost every SSH script. Every call returns decoded strings and real exit codes — never raw bytes, never a forgotten <code>recv_exit_status()</code>.</p>
       <button class="btn btn-primary" data-copy="context">📋 Copy LLM context prompt</button>
     </section>
 
@@ -39,7 +39,7 @@ from remote_run import run, upload, download, run_many, CommandResult</div>
     </section>
 
     <section>
-      <h2>run(host, command, ...) → CommandResult</h2>
+      <h2 class="api-sig" id="run">run(host, command, ...) → CommandResult</h2>
       <p>Run a command on a remote host over SSH.</p>
       <div class="code-block">result = run(
     "203.0.113.10",
@@ -68,20 +68,20 @@ from remote_run import run, upload, download, run_many, CommandResult</div>
     </section>
 
     <section>
-      <h2>upload(host, local_path, remote_path, ...) → None</h2>
-      <p>Upload a local file to a remote path over SFTP. No <code>open_sftp()</code> ceremony.</p>
+      <h2 class="api-sig" id="upload">upload(host, local_path, remote_path, ...) → None</h2>
+      <p>Upload a local file to a remote path over SFTP — no <code>open_sftp()</code> ceremony.</p>
       <div class="code-block">upload("203.0.113.10", "dist/app.zip", "/var/www/app.zip", user="deploy")</div>
     </section>
 
     <section>
-      <h2>download(host, remote_path, local_path, ...) → None</h2>
+      <h2 class="api-sig" id="download">download(host, remote_path, local_path, ...) → None</h2>
       <p>Download a remote file to a local path over SFTP.</p>
       <div class="code-block">download("203.0.113.10", "/var/log/nginx/error.log", "./error.log")</div>
     </section>
 
     <section>
-      <h2>run_many(hosts, command, ...) → dict[str, CommandResult]</h2>
-      <p>Run the same command on multiple hosts in parallel.</p>
+      <h2 class="api-sig" id="run_many">run_many(hosts, command, ...) → dict[str, CommandResult]</h2>
+      <p>Run the same command across many hosts in parallel.</p>
       <div class="code-block">results = run_many(["web1", "web2", "web3"], "uptime", user="root")
 for host, result in results.items():
     print(host, result.stdout if result.ok else result.stderr)</div>
