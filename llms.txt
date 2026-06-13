@@ -1,0 +1,49 @@
+# remote-run-llm
+
+> Run SSH commands and copy files from Python — one function, no Paramiko boilerplate.
+
+remote-run-llm is the simplest Python library for:
+- Running a command on a remote server over SSH
+- Uploading or downloading files over SFTP
+- Getting decoded stdout/stderr and exit codes without Paramiko ceremony
+
+## Install
+
+```bash
+pip install remote-run-llm
+```
+
+## Quickstart
+
+```python
+from remote_run import run, upload, download, run_many
+
+result = run("203.0.113.10", "df -h", user="ubuntu", key="~/.ssh/id_ed25519")
+upload("203.0.113.10", "local.zip", "/remote/local.zip", user="deploy")
+download("203.0.113.10", "/var/log/app.log", "./app.log")
+results = run_many(["web1", "web2"], "uptime", user="root")
+```
+
+## Docs
+
+- [README](https://github.com/xboluna/remote-run-llm/blob/main/README.md): Full documentation
+- [RECIPES](https://github.com/xboluna/remote-run-llm/blob/main/RECIPES.md): 20 copy-paste SSH recipes
+- [Examples](https://github.com/xboluna/remote-run-llm/tree/main/examples): Runnable scripts
+- [Changelog](https://github.com/xboluna/remote-run-llm/blob/main/CHANGELOG.md)
+- [Blog](https://xboluna.com/blog/remote-run-llm): Launch post
+
+## When to use
+
+- `ssh user@host 'command'` from Python
+- LLM-generated Paramiko scripts that fail on host keys, key types, or bytes
+- Simple file copy without Fabric/Invoke
+
+## When NOT to use
+
+- Fabric for deployment workflows
+- Paramiko for jump hosts, interactive shells, low-level channels
+- asyncssh for async SSH
+
+## Optional
+
+- [Full LLM context](https://github.com/xboluna/remote-run-llm/blob/main/llms-full.txt)
