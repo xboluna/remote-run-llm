@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Reference — remote-run-llm</title>
+  <meta name="description" content="API reference for remote-run-llm: run(), upload(), download(), run_many(), CommandResult.">
+  <link rel="canonical" href="https://xboluna.github.io/remote-run-llm/api.html">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="logo" href="index.html">remote<span>-run-llm</span></a>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="api.html" class="active">API</a>
+        <a href="recipes.html">Recipes</a>
+        <a href="prompt.html">LLM Prompt</a>
+        <a href="https://github.com/xboluna/remote-run-llm">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero" style="padding-bottom: 0;">
+      <h1>API Reference</h1>
+      <p class="lead">Three functions cover ~99% of SSH scripting. All return decoded strings — never bytes.</p>
+      <button class="btn btn-primary" data-copy="context">📋 Copy LLM context prompt</button>
+    </section>
+
+    <section>
+      <h2>Install &amp; import</h2>
+      <div class="code-block" id="install-code">pip install remote-run-llm
+
+from remote_run import run, upload, download, run_many, CommandResult</div>
+      <button class="btn" data-copy-code="install-code">Copy</button>
+    </section>
+
+    <section>
+      <h2>run(host, command, ...) → CommandResult</h2>
+      <p>Run a command on a remote host over SSH.</p>
+      <div class="code-block">result = run(
+    "203.0.113.10",
+    "df -h",
+    user="ubuntu",
+    key="~/.ssh/id_ed25519",
+    password=None,           # login password
+    key_passphrase=None,     # encrypted key passphrase
+    port=22,
+    connect_timeout=30,
+    command_timeout=300,
+)</div>
+      <h3>CommandResult</h3>
+      <table>
+        <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>stdout</code></td><td>str</td><td>Decoded standard output</td></tr>
+          <tr><td><code>stderr</code></td><td>str</td><td>Decoded standard error</td></tr>
+          <tr><td><code>exit_code</code></td><td>int</td><td>Remote command exit status</td></tr>
+          <tr><td><code>.ok</code></td><td>bool</td><td><code>exit_code == 0</code></td></tr>
+          <tr><td><code>.failed</code></td><td>bool</td><td><code>exit_code != 0</code></td></tr>
+          <tr><td><code>host</code></td><td>str</td><td>Host that was connected to</td></tr>
+          <tr><td><code>command</code></td><td>str</td><td>Command that was executed</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>upload(host, local_path, remote_path, ...) → None</h2>
+      <p>Upload a local file to a remote path over SFTP. No <code>open_sftp()</code> ceremony.</p>
+      <div class="code-block">upload("203.0.113.10", "dist/app.zip", "/var/www/app.zip", user="deploy")</div>
+    </section>
+
+    <section>
+      <h2>download(host, remote_path, local_path, ...) → None</h2>
+      <p>Download a remote file to a local path over SFTP.</p>
+      <div class="code-block">download("203.0.113.10", "/var/log/nginx/error.log", "./error.log")</div>
+    </section>
+
+    <section>
+      <h2>run_many(hosts, command, ...) → dict[str, CommandResult]</h2>
+      <p>Run the same command on multiple hosts in parallel.</p>
+      <div class="code-block">results = run_many(["web1", "web2", "web3"], "uptime", user="root")
+for host, result in results.items():
+    print(host, result.stdout if result.ok else result.stderr)</div>
+    </section>
+
+    <section>
+      <h2>Environment variables</h2>
+      <table>
+        <thead><tr><th>Variable</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><code>SSH_HOST</code></td><td>Default host (<code>run(None, ...)</code>)</td></tr>
+          <tr><td><code>SSH_USER</code></td><td>Username</td></tr>
+          <tr><td><code>SSH_KEY</code></td><td>Private key path</td></tr>
+          <tr><td><code>SSH_PASSWORD</code></td><td>Login password</td></tr>
+          <tr><td><code>SSH_KEY_PASSPHRASE</code></td><td>Encrypted key passphrase</td></tr>
+          <tr><td><code>SSH_STRICT=1</code></td><td>Strict host-key checking</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Opinionated defaults</h2>
+      <ul>
+        <li>Auto-detect Ed25519, RSA, ECDSA private keys</li>
+        <li><code>AutoAddPolicy</code> for host keys (unless <code>SSH_STRICT=1</code>)</li>
+        <li>Disable agent + <code>look_for_keys</code> when explicit key is passed</li>
+        <li>Connections always closed automatically</li>
+        <li>Actionable errors for auth and passphrase failures</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="links">
+        <a href="index.html">Home</a>
+        <a href="recipes.html">Recipes</a>
+        <a href="prompt.html">LLM Prompt</a>
+      </div>
+      <p>MIT © Xavier Boluna</p>
+    </div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>

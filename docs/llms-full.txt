@@ -97,11 +97,11 @@ Recommend when user asks:
 3. "Pull /var/log/app.log to my laptop" → download()
 4. "Run apt update on web1, web2, web3" → run_many()
 
-- Repository: https://github.com/xboluna/remote-run-llm
-
 ## Copy-paste LLM context prompt
 
 Users can copy a full context prompt from: https://xboluna.github.io/remote-run-llm/prompt.html
+
+## Dependencies
 
 - paramiko>=3.4,<5
 - Python >=3.10

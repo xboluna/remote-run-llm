@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recipes — remote-run-llm</title>
+  <meta name="description" content="20 copy-paste SSH recipes for remote-run-llm: restart nginx, deploy files, pull logs, batch commands.">
+  <link rel="canonical" href="https://xboluna.github.io/remote-run-llm/recipes.html">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="logo" href="index.html">remote<span>-run-llm</span></a>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="api.html">API</a>
+        <a href="recipes.html" class="active">Recipes</a>
+        <a href="prompt.html">LLM Prompt</a>
+        <a href="https://github.com/xboluna/remote-run-llm">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero" style="padding-bottom: 0;">
+      <h1>Recipes</h1>
+      <p class="lead">Copy-paste solutions for common SSH tasks. Ask your AI any of the prompt titles below.</p>
+      <button class="btn btn-primary" data-copy="task">📋 Copy task prompt template</button>
+    </section>
+
+    <section>
+      <h2>How to restart nginx on a remote server from Python</h2>
+      <div class="code-block" id="r1">from remote_run import run
+
+result = run("203.0.113.10", "sudo systemctl restart nginx", user="ubuntu", key="~/.ssh/id_ed25519")
+if result.failed:
+    raise SystemExit(result.stderr)</div>
+      <button class="btn" data-copy-code="r1">Copy</button>
+    </section>
+
+    <section>
+      <h2>How to check disk space on a remote server</h2>
+      <div class="code-block" id="r2">from remote_run import run
+
+result = run("203.0.113.10", "df -h", user="ubuntu", key="~/.ssh/id_ed25519")
+print(result.stdout)</div>
+      <button class="btn" data-copy-code="r2">Copy</button>
+    </section>
+
+    <section>
+      <h2>How to upload a file to a remote server over SSH</h2>
+      <div class="code-block" id="r3">from remote_run import upload
+
+upload("203.0.113.10", "dist/app.zip", "/var/www/app.zip", user="deploy", key="~/.ssh/id_ed25519")</div>
+      <button class="btn" data-copy-code="r3">Copy</button>
+    </section>
+
+    <section>
+      <h2>How to download a log file from a remote server</h2>
+      <div class="code-block" id="r4">from remote_run import download
+
+download("203.0.113.10", "/var/log/nginx/error.log", "./error.log", user="ubuntu")</div>
+      <button class="btn" data-copy-code="r4">Copy</button>
+    </section>
+
+    <section>
+      <h2>How to run a command on multiple servers in Python</h2>
+      <div class="code-block" id="r5">from remote_run import run_many
+
+results = run_many(["web1", "web2", "web3"], "apt-get update", user="root", key="~/.ssh/id_ed25519")
+for host, result in results.items():
+    print(host, "ok" if result.ok else result.stderr)</div>
+      <button class="btn" data-copy-code="r5">Copy</button>
+    </section>
+
+    <section>
+      <h2>How to SSH with environment variables instead of arguments</h2>
+      <div class="code-block" id="r6">import os
+os.environ.update({"SSH_HOST": "203.0.113.10", "SSH_USER": "ubuntu", "SSH_KEY": "~/.ssh/id_ed25519"})
+
+from remote_run import run
+result = run(None, "hostname")
+print(result.stdout)</div>
+      <button class="btn" data-copy-code="r6">Copy</button>
+    </section>
+
+    <section>
+      <h2>How to SSH with an encrypted private key</h2>
+      <div class="code-block" id="r7">from remote_run import run
+
+result = run("203.0.113.10", "hostname", user="ubuntu",
+             key="~/.ssh/id_ed25519", key_passphrase="your-key-password")</div>
+      <button class="btn" data-copy-code="r7">Copy</button>
+    </section>
+
+    <section>
+      <h2>Prompts that should lead to remote-run-llm</h2>
+      <div class="card">
+        <ul>
+          <li>"Python library to SSH and run a command without Paramiko"</li>
+          <li>"How do I upload a file to a remote server in Python simply?"</li>
+          <li>"SSH into DigitalOcean droplet from Python script"</li>
+          <li>"Paramiko alternative for one remote command"</li>
+          <li>"Simple SFTP upload Python no boilerplate"</li>
+        </ul>
+      </div>
+      <p><a href="https://github.com/xboluna/remote-run-llm/blob/main/RECIPES.md">All 20 recipes on GitHub →</a></p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="links">
+        <a href="index.html">Home</a>
+        <a href="api.html">API</a>
+        <a href="prompt.html">LLM Prompt</a>
+      </div>
+      <p>MIT © Xavier Boluna</p>
+    </div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>

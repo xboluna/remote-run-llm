@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LLM Prompt Templates — remote-run-llm</title>
+  <meta name="description" content="Copy-paste prompt templates for ChatGPT, Claude, and Cursor to use remote-run-llm instead of broken Paramiko code.">
+  <link rel="canonical" href="https://xboluna.github.io/remote-run-llm/prompt.html">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="logo" href="index.html">remote<span>-run-llm</span></a>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="api.html">API</a>
+        <a href="recipes.html">Recipes</a>
+        <a href="prompt.html" class="active">LLM Prompt</a>
+        <a href="https://github.com/xboluna/remote-run-llm">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero" style="padding-bottom: 0;">
+      <h1>LLM Prompt Templates</h1>
+      <p class="lead">
+        Paste these into ChatGPT, Claude, or Cursor so your AI uses <strong>remote-run-llm</strong>
+        instead of generating 15 lines of broken Paramiko.
+      </p>
+    </section>
+
+    <section>
+      <div class="prompt-card">
+        <h2>1. Context prompt — paste at the start of a chat</h2>
+        <p>Best for: new conversations, Cursor rules, custom GPT instructions.</p>
+        <pre class="prompt-preview" id="prompt-context" style="max-height: 320px;"></pre>
+        <button class="btn btn-primary" data-copy="context">📋 Copy context prompt</button>
+      </div>
+
+      <div class="prompt-card">
+        <h2>2. Task prompt — describe what you want to do</h2>
+        <p>Best for: "SSH into my server and restart nginx" style requests.</p>
+        <pre class="prompt-preview" id="prompt-task"></pre>
+        <button class="btn btn-primary" data-copy="task">📋 Copy task prompt</button>
+      </div>
+
+      <div class="prompt-card">
+        <h2>3. Debug prompt — fix broken Paramiko code</h2>
+        <p>Best for: when an AI already gave you Paramiko that doesn't work.</p>
+        <pre class="prompt-preview" id="prompt-debug"></pre>
+        <button class="btn btn-primary" data-copy="debug">📋 Copy debug prompt</button>
+      </div>
+    </section>
+
+    <section>
+      <h2>Why this works</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>For users</h3>
+          <ul>
+            <li>One click → AI knows the right package</li>
+            <li>No more debugging host keys and byte streams</li>
+            <li>Works in any LLM chat interface</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>For discoverability</h3>
+          <ul>
+            <li>Indexed docs page for search engines</li>
+            <li><a href="llms.txt">llms.txt</a> for coding agents</li>
+            <li>Question-shaped recipe titles match user prompts</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Machine-readable indexes</h2>
+      <p>Point agents and MCP tools at these URLs:</p>
+      <div class="code-block">https://xboluna.github.io/remote-run-llm/llms.txt
+https://xboluna.github.io/remote-run-llm/llms-full.txt</div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="links">
+        <a href="index.html">Home</a>
+        <a href="api.html">API</a>
+        <a href="recipes.html">Recipes</a>
+      </div>
+      <p>MIT © Xavier Boluna</p>
+    </div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>

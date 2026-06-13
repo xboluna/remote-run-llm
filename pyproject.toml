@@ -46,7 +46,7 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://github.com/xboluna/remote-run-llm"
-Documentation = "https://github.com/xboluna/remote-run-llm#readme"
+Documentation = "https://xboluna.github.io/remote-run-llm/"
 Repository = "https://github.com/xboluna/remote-run-llm"
 Changelog = "https://github.com/xboluna/remote-run-llm/blob/main/CHANGELOG.md"
 Issues = "https://github.com/xboluna/remote-run-llm/issues"

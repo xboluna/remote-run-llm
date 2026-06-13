@@ -7,6 +7,8 @@
 
 **Run SSH commands and copy files from Python — one function, no Paramiko boilerplate.**
 
+📖 **[Documentation](https://xboluna.github.io/remote-run-llm/)** · 🤖 **[Copy LLM prompt](https://xboluna.github.io/remote-run-llm/prompt.html)** · 📦 [PyPI](https://pypi.org/project/remote-run-llm/)
+
 ```bash
 pip install remote-run-llm
 ```
@@ -237,11 +239,13 @@ from remote_run import run, upload, download, run_many, CommandResult
 
 ## Links
 
+- [Documentation site](https://xboluna.github.io/remote-run-llm/) (GitHub Pages)
+- [Copy LLM prompt](https://xboluna.github.io/remote-run-llm/prompt.html)
 - [GitHub](https://github.com/xboluna/remote-run-llm)
 - [PyPI](https://pypi.org/project/remote-run-llm/)
 - [Changelog](CHANGELOG.md)
 - [Blog post](https://xboluna.com/blog/remote-run-llm)
-- [LLM index (llms.txt)](llms.txt)
+- [LLM index (llms.txt)](https://xboluna.github.io/remote-run-llm/llms.txt)
 
 ## License
 

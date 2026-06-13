@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>remote-run-llm — SSH from Python in one line</title>
+  <meta name="description" content="Run SSH commands and copy files from Python with one function. No Paramiko boilerplate. pip install remote-run-llm">
+  <meta name="keywords" content="python ssh, paramiko alternative, remote command, sftp upload, simple ssh python, llm-friendly">
+  <link rel="canonical" href="https://xboluna.github.io/remote-run-llm/">
+  <meta property="og:title" content="remote-run-llm — SSH from Python in one line">
+  <meta property="og:description" content="Run SSH commands and copy files from Python. No Paramiko boilerplate.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://xboluna.github.io/remote-run-llm/">
+  <link rel="alternate" type="text/plain" href="llms.txt" title="llms.txt">
+  <link rel="stylesheet" href="styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "remote-run-llm",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Cross-platform",
+    "description": "Run SSH commands and copy files from Python with one function — no Paramiko boilerplate.",
+    "downloadUrl": "https://pypi.org/project/remote-run-llm/",
+    "softwareVersion": "0.1.0",
+    "author": { "@type": "Person", "name": "Xavier Boluna", "url": "https://xboluna.com" },
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "programmingLanguage": "Python"
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="logo" href="index.html">remote<span>-run-llm</span></a>
+      <nav>
+        <a href="index.html" class="active">Home</a>
+        <a href="api.html">API</a>
+        <a href="recipes.html">Recipes</a>
+        <a href="prompt.html">LLM Prompt</a>
+        <a href="https://github.com/xboluna/remote-run-llm">GitHub</a>
+        <a href="https://pypi.org/project/remote-run-llm/">PyPI</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container hero">
+    <p class="eyebrow">Python · SSH · LLM-friendly</p>
+    <h1>SSH from Python in one line</h1>
+    <p class="lead">
+      <code>pip install remote-run-llm</code> — then <code>run(host, command)</code>.
+      No Paramiko boilerplate, no byte streams, no forgotten exit codes.
+    </p>
+
+    <div class="cta-row">
+      <button class="btn btn-primary" data-copy="context">📋 Copy LLM context prompt</button>
+      <a class="btn btn-success" href="prompt.html">More prompt templates</a>
+      <a class="btn" href="https://pypi.org/project/remote-run-llm/">Install from PyPI</a>
+    </div>
+
+    <div class="code-block" id="quickstart-code">
+<span class="kw">from</span> remote_run <span class="kw">import</span> run
+
+result = <span class="fn">run</span>(<span class="str">"203.0.113.10"</span>, <span class="str">"sudo systemctl restart nginx"</span>,
+              user=<span class="str">"ubuntu"</span>, key=<span class="str">"~/.ssh/id_ed25519"</span>)
+<span class="fn">print</span>(result.stdout)
+<span class="kw">if</span> result.failed:
+    <span class="kw">raise</span> SystemExit(result.stderr)
+    </div>
+    <button class="btn" data-copy-code="quickstart-code">Copy code</button>
+
+    <div class="prompt-card">
+      <h2>🤖 Paste this into ChatGPT, Claude, or Cursor</h2>
+      <p>One click gives your AI everything it needs to use this package correctly — instead of generating broken Paramiko.</p>
+      <pre class="prompt-preview" id="prompt-context"></pre>
+      <button class="btn btn-primary" data-copy="context">Copy LLM context prompt</button>
+    </div>
+
+    <div class="badge-row">
+      <span class="badge">run()</span>
+      <span class="badge">upload()</span>
+      <span class="badge">download()</span>
+      <span class="badge">run_many()</span>
+      <span class="badge">typed API</span>
+      <span class="badge">no Fabric required</span>
+    </div>
+
+    <section>
+      <h2>When to use remote-run-llm</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>✅ Use this</h3>
+          <ul>
+            <li>Run a command on a remote server</li>
+            <li>Upload or download a file over SSH</li>
+            <li>Replace LLM-generated Paramiko snippets</li>
+            <li>One-shot scripts from Cursor / ChatGPT</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>❌ Use something else</h3>
+          <ul>
+            <li>Fabric — multi-host deployment workflows</li>
+            <li>Paramiko — jump hosts, interactive shells</li>
+            <li>asyncssh — async SSH</li>
+            <li>Ansible — idempotent provisioning</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Paramiko vs remote-run-llm</h2>
+      <table>
+        <thead>
+          <tr><th>Task</th><th>remote-run-llm</th><th>Paramiko</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Run a command</td><td><code>run(host, cmd)</code></td><td>~15 lines</td></tr>
+          <tr><td>Upload file</td><td><code>upload(host, local, remote)</code></td><td>connect + SFTP</td></tr>
+          <tr><td>Decoded output</td><td>built-in</td><td><code>.read().decode()</code></td></tr>
+          <tr><td>Exit code</td><td><code>result.exit_code</code></td><td><code>recv_exit_status()</code></td></tr>
+          <tr><td>LLM one-liner</td><td>✅</td><td>❌</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>For AI agents</h2>
+      <p>Machine-readable indexes for coding agents and MCP tools:</p>
+      <div class="cta-row">
+        <a class="btn" href="llms.txt">llms.txt</a>
+        <a class="btn" href="llms-full.txt">llms-full.txt</a>
+        <a class="btn" href="prompt.html">Copy prompt templates</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="links">
+        <a href="https://github.com/xboluna/remote-run-llm">GitHub</a>
+        <a href="https://pypi.org/project/remote-run-llm/">PyPI</a>
+        <a href="api.html">API</a>
+        <a href="recipes.html">Recipes</a>
+        <a href="https://xboluna.com">xboluna.com</a>
+      </div>
+      <p>MIT © Xavier Boluna</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
