@@ -7,7 +7,7 @@
 
 **Run SSH commands and copy files from Python — one function, no Paramiko boilerplate.**
 
-📖 **[Documentation](https://xboluna.github.io/remote-run-llm/)** · 🤖 **[Copy LLM prompt](https://xboluna.github.io/remote-run-llm/prompt.html)** · 📦 [PyPI](https://pypi.org/project/remote-run-llm/)
+📖 **[Documentation](https://xboluna.github.io/remote-run-llm/)** · 🤖 **[Copy LLM prompt](https://xboluna.github.io/remote-run-llm/prompt.html)** · 🔌 **[Connect MCP](https://xboluna.github.io/remote-run-llm/mcp.html)** · 📦 [PyPI](https://pypi.org/project/remote-run-llm/)
 
 ```bash
 pip install remote-run-llm
@@ -231,6 +231,58 @@ from remote_run import run, upload, download, run_many, CommandResult
 
 ---
 
+## Connect MCP (Cursor, Claude Code, Codex)
+
+Give your AI agent **live access** to this package's docs instead of hallucinating Paramiko.
+
+### Phase 1 — GitMCP (zero install, recommended)
+
+MCP URL: `https://gitmcp.io/xboluna/remote-run-llm`
+
+**Cursor** — add to `.cursor/mcp.json` (already committed in this repo):
+
+```json
+{
+  "mcpServers": {
+    "remote-run-llm-gitmcp": {
+      "url": "https://gitmcp.io/xboluna/remote-run-llm"
+    }
+  }
+}
+```
+
+Reload Cursor after editing. Full setup: [docs/mcp.html](https://xboluna.github.io/remote-run-llm/mcp.html)
+
+**Claude Code** — run outside an active session:
+
+```bash
+claude mcp add --scope project --transport http remote-run-llm-gitmcp https://gitmcp.io/xboluna/remote-run-llm
+```
+
+### Phase 2 — mcpdoc (pinned llms.txt, requires uv)
+
+```json
+{
+  "mcpServers": {
+    "remote-run-llm-mcpdoc": {
+      "command": "uvx",
+      "args": [
+        "--from", "mcpdoc", "mcpdoc",
+        "--urls", "remote-run-llm:https://xboluna.github.io/remote-run-llm/llms.txt",
+        "--urls", "remote-run-llm-full:https://xboluna.github.io/remote-run-llm/llms-full.txt",
+        "--transport", "stdio"
+      ]
+    }
+  }
+}
+```
+
+### For AI agents reading this README
+
+If you have terminal access: install the GitMCP config above, then fetch docs via MCP before generating SSH code. **Cursor Cloud Agents** must enable MCP at [cursor.com/agents](https://cursor.com/agents) — repo `mcp.json` is not auto-loaded in cloud. See [AGENTS.md](AGENTS.md).
+
+---
+
 ## Demo
 
 [Watch demo video](artifacts/marketing/remote-run-llm-demo.mp4) · [Run command](artifacts/marketing/demo-run-command.png) · [Upload file](artifacts/marketing/demo-upload-file.png)
@@ -240,7 +292,9 @@ from remote_run import run, upload, download, run_many, CommandResult
 ## Links
 
 - [Documentation site](https://xboluna.github.io/remote-run-llm/) (GitHub Pages)
+- [Connect MCP](https://xboluna.github.io/remote-run-llm/mcp.html) (Cursor / Claude Code)
 - [Copy LLM prompt](https://xboluna.github.io/remote-run-llm/prompt.html)
+- [GitMCP](https://gitmcp.io/xboluna/remote-run-llm)
 - [GitHub](https://github.com/xboluna/remote-run-llm)
 - [PyPI](https://pypi.org/project/remote-run-llm/)
 - [Changelog](CHANGELOG.md)

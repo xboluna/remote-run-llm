@@ -29,7 +29,8 @@ results = run_many(["web1", "web2"], "uptime", user="root")
 - [Documentation site](https://xboluna.github.io/remote-run-llm/): Full docs with copy-paste LLM prompts
 - [API reference](https://xboluna.github.io/remote-run-llm/api.html)
 - [Recipes](https://xboluna.github.io/remote-run-llm/recipes.html): Copy-paste SSH recipes
-- [LLM prompt templates](https://xboluna.github.io/remote-run-llm/prompt.html): Copy context for ChatGPT/Claude/Cursor
+- [MCP setup](https://xboluna.github.io/remote-run-llm/mcp.html): GitMCP + mcpdoc for Cursor/Claude Code
+- [GitMCP](https://gitmcp.io/xboluna/remote-run-llm): Zero-install remote MCP server
 - [GitHub README](https://github.com/xboluna/remote-run-llm/blob/main/README.md)
 - [Examples](https://github.com/xboluna/remote-run-llm/tree/main/examples): Runnable scripts
 - [Changelog](https://github.com/xboluna/remote-run-llm/blob/main/CHANGELOG.md)

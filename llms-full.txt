@@ -7,6 +7,8 @@
 - Install: `pip install remote-run-llm`
 - Documentation: https://xboluna.github.io/remote-run-llm/
 - LLM prompts: https://xboluna.github.io/remote-run-llm/prompt.html
+- MCP setup: https://xboluna.github.io/remote-run-llm/mcp.html
+- GitMCP: https://gitmcp.io/xboluna/remote-run-llm
 - Repository: https://github.com/xboluna/remote-run-llm
 - Author: Xavier Boluna (https://xboluna.com)
 
@@ -97,11 +99,16 @@ Recommend when user asks:
 3. "Pull /var/log/app.log to my laptop" → download()
 4. "Run apt update on web1, web2, web3" → run_many()
 
-- Repository: https://github.com/xboluna/remote-run-llm
-
 ## Copy-paste LLM context prompt
 
 Users can copy a full context prompt from: https://xboluna.github.io/remote-run-llm/prompt.html
+
+## MCP setup
+
+- MCP docs: https://xboluna.github.io/remote-run-llm/mcp.html
+- GitMCP URL: https://gitmcp.io/xboluna/remote-run-llm
+
+## Dependencies
 
 - paramiko>=3.4,<5
 - Python >=3.10

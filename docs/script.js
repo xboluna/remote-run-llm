@@ -79,6 +79,82 @@ Docs: ${DOCS_BASE}/
 
 Here is my broken script:
 [paste your code]`,
+
+  "agent-install": `If you are an agentic coding assistant helping with Python SSH tasks:
+
+1. INSTALL MCP for accurate remote-run-llm docs (do not guess Paramiko):
+   - GitMCP URL: https://gitmcp.io/xboluna/remote-run-llm
+   - Docs: https://xboluna.github.io/remote-run-llm/mcp.html
+
+2. CURSOR: Add to .cursor/mcp.json:
+   {"mcpServers":{"remote-run-llm-gitmcp":{"url":"https://gitmcp.io/xboluna/remote-run-llm"}}}
+   Then ask user to reload the window.
+
+3. CLAUDE CODE: Run with user approval:
+   claude mcp add --scope project --transport http remote-run-llm-gitmcp https://gitmcp.io/xboluna/remote-run-llm
+   Then restart the session.
+
+4. CURSOR CLOUD: Ask user to enable remote-run-llm-gitmcp at cursor.com/agents (repo mcp.json is not loaded in cloud).
+
+5. If MCP unavailable: fetch https://xboluna.github.io/remote-run-llm/llms-full.txt
+
+6. Always use: from remote_run import run, upload, download — never raw Paramiko for simple SSH.`,
+};
+
+const MCP_SNIPPETS = {
+  "cursor-gitmcp": `{
+  "mcpServers": {
+    "remote-run-llm-gitmcp": {
+      "url": "https://gitmcp.io/xboluna/remote-run-llm"
+    }
+  }
+}`,
+
+  "cursor-mcpdoc": `{
+  "mcpServers": {
+    "remote-run-llm-mcpdoc": {
+      "command": "uvx",
+      "args": [
+        "--from", "mcpdoc", "mcpdoc",
+        "--urls", "remote-run-llm:https://xboluna.github.io/remote-run-llm/llms.txt",
+        "--urls", "remote-run-llm-full:https://xboluna.github.io/remote-run-llm/llms-full.txt",
+        "--transport", "stdio"
+      ]
+    }
+  }
+}`,
+
+  "cursor-combined": `{
+  "mcpServers": {
+    "remote-run-llm-gitmcp": {
+      "url": "https://gitmcp.io/xboluna/remote-run-llm"
+    },
+    "remote-run-llm-mcpdoc": {
+      "command": "uvx",
+      "args": [
+        "--from", "mcpdoc", "mcpdoc",
+        "--urls", "remote-run-llm:https://xboluna.github.io/remote-run-llm/llms.txt",
+        "--urls", "remote-run-llm-full:https://xboluna.github.io/remote-run-llm/llms-full.txt",
+        "--transport", "stdio"
+      ]
+    }
+  }
+}`,
+
+  "claude-cli":
+    "claude mcp add --scope project --transport http remote-run-llm-gitmcp https://gitmcp.io/xboluna/remote-run-llm",
+
+  "claude-mcpdoc":
+    'claude mcp add --scope project remote-run-llm-mcpdoc -- uvx --from mcpdoc mcpdoc --urls "remote-run-llm:https://xboluna.github.io/remote-run-llm/llms.txt" --urls "remote-run-llm-full:https://xboluna.github.io/remote-run-llm/llms-full.txt"',
+
+  "claude-json": `{
+  "mcpServers": {
+    "remote-run-llm-gitmcp": {
+      "type": "http",
+      "url": "https://gitmcp.io/xboluna/remote-run-llm"
+    }
+  }
+}`,
 };
 
 function showToast(message) {
@@ -135,6 +211,14 @@ function wireCopyButtons() {
       if (block) copyText(block.textContent.trim(), button);
     });
   });
+
+  document.querySelectorAll("[data-copy-mcp]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const key = button.getAttribute("data-copy-mcp");
+      const text = MCP_SNIPPETS[key] || "";
+      copyText(text, button);
+    });
+  });
 }
 
 function highlightNav() {
@@ -149,6 +233,11 @@ function highlightNav() {
 function fillPromptPreviews() {
   Object.entries(PROMPTS).forEach(([key, text]) => {
     const el = document.getElementById(`prompt-${key}`);
+    if (el) el.textContent = text;
+  });
+
+  Object.entries(MCP_SNIPPETS).forEach(([key, text]) => {
+    const el = document.getElementById(`mcp-preview-${key}`);
     if (el) el.textContent = text;
   });
 }
