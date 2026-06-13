@@ -83,7 +83,7 @@ def draw_window(
 def save_demo_run() -> Path:
     lines = [
         ("$ pip install remote-run-llm", CYAN),
-        ("Successfully installed remote-run-llm-0.1.0", GREEN),
+        ("Successfully installed remote-run-llm-0.1.1", GREEN),
         ("", TEXT),
         ("$ python restart_nginx.py", CYAN),
         ("", TEXT),
