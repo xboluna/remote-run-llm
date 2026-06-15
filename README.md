@@ -65,6 +65,7 @@ uv add remote-run-llm
 | Run a remote command | `run(host, command, user=..., key=...)` |
 | Upload a file | `upload(host, local_path, remote_path, ...)` |
 | Download a file | `download(host, remote_path, local_path, ...)` |
+| Run a local script remotely | `run_script(host, local_path, *args, ...)` |
 | Run on many hosts | `run_many([host1, host2], command, ...)` |
 
 All functions accept: `user`, `key`, `password`, `key_passphrase`, `port` (default 22).
@@ -220,7 +221,7 @@ See [`RECIPES.md`](RECIPES.md) for 20 copy-paste recipes and [`examples/`](examp
 ## API
 
 ```python
-from remote_run import run, upload, download, run_many, CommandResult
+from remote_run import run, upload, download, run_many, run_script, CommandResult
 ```
 
 ### `run(host, command, *, user=None, key=None, password=None, key_passphrase=None, port=22, connect_timeout=30, command_timeout=300) -> CommandResult`
@@ -228,6 +229,10 @@ from remote_run import run, upload, download, run_many, CommandResult
 ### `upload(host, local_path, remote_path, *, user=None, key=None, password=None, key_passphrase=None, port=22) -> None`
 
 ### `download(host, remote_path, local_path, *, user=None, key=None, password=None, key_passphrase=None, port=22) -> None`
+
+### `run_script(host, local_path, *args, *, user=None, key=None, password=None, key_passphrase=None, port=22, interpreter=None, remote_dir="/tmp/remote-run-llm", cleanup=True) -> CommandResult`
+
+Uploads a local script, runs it on the remote host in one SSH session, and removes the temp copy by default. Auto-selects `python3` for `.py`, `bash` for `.sh`, or honors a `#!` shebang.
 
 ### `run_many(hosts, command, *, user=None, key=None, password=None, key_passphrase=None, port=22, max_workers=None) -> dict[str, CommandResult]`
 

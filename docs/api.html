@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>API Reference — remote-run-llm</title>
-  <meta name="description" content="API reference for remote-run-llm: run(), upload(), download(), run_many(), CommandResult.">
+  <meta name="description" content="API reference for remote-run-llm: run(), upload(), download(), run_many(), run_script(), CommandResult.">
   <link rel="canonical" href="https://xboluna.github.io/remote-run-llm/api.html">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -26,7 +26,7 @@
   <main class="container">
     <section class="hero" style="padding-bottom: 0;">
       <h1>API Reference</h1>
-      <p class="lead">Four functions cover almost every SSH script. Every call returns decoded strings and real exit codes — never raw bytes, never a forgotten <code>recv_exit_status()</code>.</p>
+      <p class="lead">Five functions cover almost every SSH script. Every call returns decoded strings and real exit codes — never raw bytes, never a forgotten <code>recv_exit_status()</code>.</p>
       <button class="btn btn-primary" data-copy="context">📋 Copy LLM context prompt</button>
     </section>
 
@@ -34,7 +34,7 @@
       <h2>Install &amp; import</h2>
       <div class="code-block" id="install-code">pip install remote-run-llm
 
-from remote_run import run, upload, download, run_many, CommandResult</div>
+from remote_run import run, upload, download, run_many, run_script, CommandResult</div>
       <button class="btn" data-copy-code="install-code">Copy</button>
     </section>
 
@@ -77,6 +77,24 @@ from remote_run import run, upload, download, run_many, CommandResult</div>
       <h2 class="api-sig" id="download">download(host, remote_path, local_path, ...) → None</h2>
       <p>Download a remote file to a local path over SFTP.</p>
       <div class="code-block">download("203.0.113.10", "/var/log/nginx/error.log", "./error.log")</div>
+    </section>
+
+    <section>
+      <h2 class="api-sig" id="run_script">run_script(host, local_path, *args, ...) → CommandResult</h2>
+      <p>Upload a local script and run it on a remote host in one SSH session. Edits stay on your machine — the file is copied to <code>/tmp/remote-run-llm/</code>, executed, and removed by default.</p>
+      <div class="code-block">result = run_script(
+    "192.168.1.101",
+    "hello.py",
+    user="ubuntu",
+    key="~/.ssh/id_ed25519",
+)
+
+# Script arguments go after the path
+result = run_script("vm.local", "deploy.sh", "--dry-run", user="deploy")
+
+# Override interpreter or keep the remote copy for debugging
+result = run_script("vm.local", "task.pl", interpreter="perl", cleanup=False)</div>
+      <p>Auto-selects <code>python3</code> for <code>.py</code>, <code>bash</code> for <code>.sh</code>, or honors a <code>#!</code> shebang. For multi-file scripts, upload dependencies separately or deploy the project directory.</p>
     </section>
 
     <section>
