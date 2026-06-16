@@ -5,6 +5,7 @@
 remote-run-llm is the simplest Python library for:
 - Running a command on a remote server over SSH
 - Uploading or downloading files over SFTP
+- Running a local script on a remote VM without manual scp each edit
 - Getting decoded stdout/stderr and exit codes without Paramiko ceremony
 
 ## Install
@@ -16,12 +17,13 @@ pip install remote-run-llm
 ## Quickstart
 
 ```python
-from remote_run import run, upload, download, run_many
+from remote_run import run, upload, download, run_many, run_script
 
 result = run("203.0.113.10", "df -h", user="ubuntu", key="~/.ssh/id_ed25519")
 upload("203.0.113.10", "local.zip", "/remote/local.zip", user="deploy")
 download("203.0.113.10", "/var/log/app.log", "./app.log")
 results = run_many(["web1", "web2"], "uptime", user="root")
+run_script("192.168.1.101", "hello.py", user="ubuntu")  # edit locally, run on VM
 ```
 
 ## Docs

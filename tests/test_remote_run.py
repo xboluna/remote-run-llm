@@ -6,7 +6,7 @@ from unittest.mock import MagicMock, patch
 import paramiko
 import pytest
 
-from remote_run import CommandResult, download, run, run_many, upload
+from remote_run import CommandResult, download, run, run_many, run_script, upload
 from remote_run.auth import (
     build_connect_kwargs,
     discover_default_key,
@@ -190,3 +190,60 @@ def test_discover_default_key_returns_none_when_missing(
         ("/nonexistent/id_ed25519", "/nonexistent/id_rsa"),
     )
     assert discover_default_key() is None
+
+
+def test_run_script_uploads_and_executes(tmp_path: Path) -> None:
+    script = tmp_path / "hello.py"
+    script.write_text('print("hello from remote")\n')
+
+    mock_client = MagicMock(spec=paramiko.SSHClient)
+    mock_sftp = MagicMock()
+    mock_client.open_sftp.return_value.__enter__.return_value = mock_sftp
+
+    mkdir_stdout = MagicMock()
+    mkdir_stderr = MagicMock()
+    mkdir_stdin = MagicMock()
+    mkdir_stdout.channel.recv_exit_status.return_value = 0
+    mkdir_stdout.read.return_value = b""
+    mkdir_stderr.read.return_value = b""
+
+    run_stdout = MagicMock()
+    run_stderr = MagicMock()
+    run_stdin = MagicMock()
+    run_stdout.channel.recv_exit_status.return_value = 0
+    run_stdout.read.return_value = b"hello from remote\n"
+    run_stderr.read.return_value = b""
+    mock_client.exec_command.side_effect = [
+        (mkdir_stdin, mkdir_stdout, mkdir_stderr),
+        (run_stdin, run_stdout, run_stderr),
+    ]
+
+    with patch("remote_run.connection.ssh_client") as ssh_ctx:
+        ssh_ctx.return_value.__enter__.return_value = mock_client
+        result = run_script("192.168.1.101", str(script), user="ubuntu")
+
+    mock_sftp.put.assert_called_once()
+    put_args = mock_sftp.put.call_args.args
+    assert put_args[0] == str(script)
+    assert put_args[1].startswith("/tmp/remote-run-llm/hello-")
+    assert put_args[1].endswith(".py")
+
+    run_call = mock_client.exec_command.call_args_list[1].args[0]
+    assert run_call.startswith("python3 ")
+    assert "hello-" in run_call
+    assert run_call.endswith("; exit $ec")
+    assert result.stdout == "hello from remote\n"
+    assert result.ok is True
+
+
+def test_run_script_missing_file_raises(tmp_path: Path) -> None:
+    with pytest.raises(FileNotFoundError, match="Local script not found"):
+        run_script("192.168.1.101", str(tmp_path / "missing.py"))
+
+
+def test_run_script_unknown_extension_requires_interpreter(tmp_path: Path) -> None:
+    script = tmp_path / "task"
+    script.write_text("echo hi\n")
+
+    with pytest.raises(ValueError, match="Cannot determine how to run"):
+        run_script("192.168.1.101", str(script))

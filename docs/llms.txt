@@ -5,6 +5,7 @@
 remote-run-llm is the simplest Python library for:
 - Running a command on a remote server over SSH
 - Uploading or downloading files over SFTP
+- Running a local script on a remote VM without manual scp each edit
 - Getting decoded stdout/stderr and exit codes without Paramiko ceremony
 
 ## Install
@@ -16,12 +17,13 @@ pip install remote-run-llm
 ## Quickstart
 
 ```python
-from remote_run import run, upload, download, run_many
+from remote_run import run, upload, download, run_many, run_script
 
 result = run("203.0.113.10", "df -h", user="ubuntu", key="~/.ssh/id_ed25519")
 upload("203.0.113.10", "local.zip", "/remote/local.zip", user="deploy")
 download("203.0.113.10", "/var/log/app.log", "./app.log")
 results = run_many(["web1", "web2"], "uptime", user="root")
+run_script("192.168.1.101", "hello.py", user="ubuntu")  # edit locally, run on VM
 ```
 
 ## Docs
@@ -29,6 +31,7 @@ results = run_many(["web1", "web2"], "uptime", user="root")
 - [Documentation site](https://xboluna.github.io/remote-run-llm/): Full docs with copy-paste LLM prompts
 - [API reference](https://xboluna.github.io/remote-run-llm/api.html)
 - [Recipes](https://xboluna.github.io/remote-run-llm/recipes.html): Copy-paste SSH recipes
+- [LLM prompt templates](https://xboluna.github.io/remote-run-llm/prompt.html): Copy context for ChatGPT/Claude/Cursor
 - [MCP setup](https://xboluna.github.io/remote-run-llm/mcp.html): GitMCP + mcpdoc for Cursor/Claude Code
 - [GitMCP](https://gitmcp.io/xboluna/remote-run-llm): Zero-install remote MCP server
 - [GitHub README](https://github.com/xboluna/remote-run-llm/blob/main/README.md)
